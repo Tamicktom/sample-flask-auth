@@ -105,6 +105,38 @@ def get_user(id: int):
         return jsonify({"message": "Usuário não encontrado"}), 404
 
 
+@app.put("/user/<int:id>")
+@login_required  # only authenticated users can access this route
+def update_user(id: int):
+    data = request.json
+
+    user = User.query.get(id)
+
+    if not user:
+        return jsonify({"message": "Usuário não encontrado"}), 404
+
+    current_user = current_user()
+    is_same_user = user.id == current_user.id
+
+    if not is_same_user:
+        return (
+            jsonify({"message": "Você não tem permissão para atualizar este usuário"}),
+            403,
+        )
+
+    username = data.get("username")
+    password = data.get("password")
+
+    if username:
+        user.username = username
+    if password:
+        user.password = password
+
+    db.session.commit()
+
+    return jsonify({"message": "Usuário atualizado com sucesso"}), 200
+
+
 @app.get("/hello")
 def hello_world():
     return jsonify({"message": "Hello world"})
