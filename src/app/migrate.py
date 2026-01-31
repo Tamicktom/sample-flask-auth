@@ -1,7 +1,13 @@
+# Import the database
 from database import db
 
-# Create all tables
-db.create_all()
+# Import the models
+from models.user import User
 
-# Commit the changes
-db.session.commit()
+# import the app from the __init__.py file
+from __init__ import app
+
+# Create all tables
+with app.app_context():
+    db.create_all()
+    print("Tables created successfully")
