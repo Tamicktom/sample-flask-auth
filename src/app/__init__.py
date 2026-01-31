@@ -75,6 +75,16 @@ def sign_up():
     return jsonify({"message": "Credenciais inválidas"}), 400
 
 
+@app.get("/user/<int:id>")
+def get_user(id: int):
+    user = User.query.get(id)
+
+    if user:
+        return jsonify({"message": "Usuário encontrado", "user": user.to_dict()}), 200
+    else:
+        return jsonify({"message": "Usuário não encontrado"}), 404
+
+
 @app.get("/hello")
 def hello_world():
     return jsonify({"message": "Hello world"})
