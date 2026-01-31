@@ -1,4 +1,6 @@
 # Libraries imports
+from pathlib import Path
+
 from flask import Flask, jsonify, request
 from flask_login import (
     LoginManager,
@@ -12,10 +14,15 @@ from flask_login import (
 from database import db
 from models.user import User
 
+# Project root: src/app/__init__.py -> parent.parent.parent
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+INSTANCE_PATH = PROJECT_ROOT / "instance"
+INSTANCE_PATH.mkdir(exist_ok=True)
+DATABASE_PATH = INSTANCE_PATH / "database.db"
 
-app = Flask(__name__)
+app = Flask(__name__, instance_path=str(INSTANCE_PATH))
 app.config["SECRET_KEY"] = "your_secret_key"
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DATABASE_PATH}"
 
 login_manager = LoginManager()
 db.init_app(app)
@@ -80,7 +87,19 @@ def get_user(id: int):
     user = User.query.get(id)
 
     if user:
-        return jsonify({"message": "Usuário encontrado", "user": user.to_dict()}), 200
+        return (
+            jsonify(
+                {
+                    "message": "Usuário encontrado",
+                    "user": {
+                        "id": user.id,
+                        "username": user.username,
+                        "password": user.password,
+                    },
+                }
+            ),
+            200,
+        )
     else:
         return jsonify({"message": "Usuário não encontrado"}), 404
 
