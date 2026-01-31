@@ -4,4 +4,7 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .pdm-python
+
+# add the database.db file to the ignore list
 src/sample-flask-auth/instance/database.db
+/instance/database.db
