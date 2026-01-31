@@ -12,6 +12,7 @@ license = {text = "MIT"}
 
 [tool.pdm.scripts]
 dev = "python3 src/app/__init__.py"
+migrate = "python3 src/app/migrate.py"
 
 [tool.pdm]
 distribution = false
