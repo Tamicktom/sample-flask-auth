@@ -83,6 +83,7 @@ def sign_up():
 
 
 @app.get("/user/<int:id>")
+@login_required  # only authenticated users can access this route
 def get_user(id: int):
     user = User.query.get(id)
 
