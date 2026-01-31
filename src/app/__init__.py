@@ -64,7 +64,15 @@ def sign_up():
     username = data.get("username")
     password = data.get("password")
 
-    return jsonify({"message": "Usuário cadastrado com sucesso"}), 200
+    if username and password:
+        user = User(username=username, password=password)
+
+        db.session.add(user)
+        db.session.commit()
+
+        return jsonify({"message": "Usuário cadastrado com sucesso"}), 200
+
+    return jsonify({"message": "Credenciais inválidas"}), 400
 
 
 @app.get("/hello")
