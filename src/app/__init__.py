@@ -116,7 +116,6 @@ def update_user(id: int):
     if not user:
         return jsonify({"message": "Usuário não encontrado"}), 404
 
-    current_user = current_user()
     is_same_user = user.id == current_user.id
 
     # if is not the same user
@@ -128,6 +127,11 @@ def update_user(id: int):
 
     username = data.get("username")
     password = data.get("password")
+
+    # check if the new username is avaliable
+    username_owner = User.query.filter_by(username=username).first()
+    if username_owner:
+        return jsonify({"message": "Username já está sendo utilizado"}), 400
 
     if username:
         user.username = username
