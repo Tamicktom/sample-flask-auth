@@ -112,12 +112,14 @@ def update_user(id: int):
 
     user = User.query.get(id)
 
+    # If user is not found
     if not user:
         return jsonify({"message": "Usuário não encontrado"}), 404
 
     current_user = current_user()
     is_same_user = user.id == current_user.id
 
+    # if is not the same user
     if not is_same_user:
         return (
             jsonify({"message": "Você não tem permissão para atualizar este usuário"}),
@@ -134,7 +136,7 @@ def update_user(id: int):
 
     db.session.commit()
 
-    return jsonify({"message": "Usuário atualizado com sucesso"}), 200
+    return jsonify({"message": f"Usuário {id} atualizado com sucesso"}), 200
 
 
 @app.get("/hello")
