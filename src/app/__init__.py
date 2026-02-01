@@ -22,7 +22,8 @@ DATABASE_PATH = INSTANCE_PATH / "database.db"
 
 app = Flask(__name__, instance_path=str(INSTANCE_PATH))
 app.config["SECRET_KEY"] = "your_secret_key"
-app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DATABASE_PATH}"
+# app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DATABASE_PATH}"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://mysql:mysql@localhost:3306/mysql"
 
 login_manager = LoginManager()
 db.init_app(app)
