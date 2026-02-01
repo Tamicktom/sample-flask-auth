@@ -151,7 +151,7 @@ def delete_user(id: int):
     if current_user.id != user.id:
         return (
             jsonify({"message": "Você não tem permissão para deletar este usuário"}),
-            400,
+            403,
         )
 
     if not user:
