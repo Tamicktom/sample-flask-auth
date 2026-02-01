@@ -5,7 +5,7 @@ description = "Default template for PDM package"
 authors = [
     {name = "Tamicktom", email = "rickpokemon38@gmail.com"},
 ]
-dependencies = ["requests>=2.32.5", "pytest>=9.0.2", "flask>=3.1.2", "Flask-SQLAlchemy>=3.1.1", "Flask-Login>=0.6.3", "Werkzeug>=3.1.5", "pytest-flask>=1.3.0", "pymysql>=1.1.2", "cryptography>=46.0.4"]
+dependencies = ["requests>=2.32.5", "pytest>=9.0.2", "flask>=3.1.2", "Flask-SQLAlchemy>=3.1.1", "Flask-Login>=0.6.3", "Werkzeug>=3.1.5", "pytest-flask>=1.3.0", "pymysql>=1.1.2", "cryptography>=46.0.4", "bcrypt>=5.0.0"]
 requires-python = "==3.12.*"
 readme = "README.md"
 license = {text = "MIT"}
