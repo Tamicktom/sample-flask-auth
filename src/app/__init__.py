@@ -1,6 +1,6 @@
 # Libraries imports
+import bcrypt
 from pathlib import Path
-
 from flask import Flask, jsonify, request
 from flask_login import (
     LoginManager,
@@ -52,7 +52,10 @@ def login():
         # Login
         user = User.query.filter_by(username=username).first()
 
-        if user and user.password == password:
+        encoded_request_password = str.encode(password)
+        encoded_user_password = str.encode(user.password)
+        is_same_password = bcrypt.checkpw(encoded_request_password, encoded_user_password)
+        if user and is_same_password:
             login_user(user)
             print(current_user.is_authenticated)
             return jsonify({"message": "Login realizado com sucesso"}), 200
@@ -73,10 +76,11 @@ def sign_up():
 
     username = data.get("username")
     password = data.get("password")
-    role = data.get("role")
 
-    if username and password and role:
-        user = User(username=username, password=password, role=role)
+    if username and password:
+        encoded_password = str.encode(password)
+        hashed_password = bcrypt.hashpw(encoded_password, bcrypt.gensalt())
+        user = User(username=username, password=hashed_password)
 
         db.session.add(user)
         db.session.commit()
