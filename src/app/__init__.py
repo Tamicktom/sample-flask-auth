@@ -71,9 +71,10 @@ def sign_up():
 
     username = data.get("username")
     password = data.get("password")
+    role = data.get("role")
 
-    if username and password:
-        user = User(username=username, password=password)
+    if username and password and role:
+        user = User(username=username, password=password, role=role)
 
         db.session.add(user)
         db.session.commit()
@@ -97,6 +98,7 @@ def get_user(id: int):
                         "id": user.id,
                         "username": user.username,
                         "password": user.password,
+                        "role": user.role
                     },
                 }
             ),
@@ -128,6 +130,7 @@ def update_user(id: int):
 
     username = data.get("username")
     password = data.get("password")
+    role = data.get("role")
 
     # check if the new username is avaliable
     username_owner = User.query.filter_by(username=username).first()
@@ -138,6 +141,8 @@ def update_user(id: int):
         user.username = username
     if password:
         user.password = password
+    if role:
+        user.role = role
 
     db.session.commit()
 
