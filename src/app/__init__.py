@@ -23,7 +23,9 @@ DATABASE_PATH = INSTANCE_PATH / "database.db"
 app = Flask(__name__, instance_path=str(INSTANCE_PATH))
 app.config["SECRET_KEY"] = "your_secret_key"
 # app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DATABASE_PATH}"
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://mysql:mysql@localhost:3306/mysql"
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    "mysql+pymysql://mysql:mysql@localhost:3306/mysql"
+)
 
 login_manager = LoginManager()
 db.init_app(app)
@@ -98,7 +100,7 @@ def get_user(id: int):
                         "id": user.id,
                         "username": user.username,
                         "password": user.password,
-                        "role": user.role
+                        "role": user.role,
                     },
                 }
             ),
@@ -120,17 +122,27 @@ def update_user(id: int):
         return jsonify({"message": "Usuário não encontrado"}), 404
 
     is_same_user = user.id == current_user.id
+    is_admin = current_user.role == "admin"
+
+    print({
+        is_same_user,
+        is_admin
+    })
 
     # if is not the same user
     if not is_same_user:
-        return (
-            jsonify({"message": "Você não tem permissão para atualizar este usuário"}),
-            403,
-        )
+        if not is_admin:
+            return (
+                jsonify({"message": "Você não tem permissão para atualizar este usuário"}),
+                403,
+            )
 
     username = data.get("username")
     password = data.get("password")
     role = data.get("role")
+
+    if role and not is_admin:
+        return jsonify({"message": "Você não tem permissão para alterar a role"}), 400
 
     # check if the new username is avaliable
     username_owner = User.query.filter_by(username=username).first()
