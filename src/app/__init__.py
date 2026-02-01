@@ -54,7 +54,10 @@ def login():
 
         encoded_request_password = str.encode(password)
         encoded_user_password = str.encode(user.password)
-        is_same_password = bcrypt.checkpw(encoded_request_password, encoded_user_password)
+        is_same_password = bcrypt.checkpw(
+            encoded_request_password, encoded_user_password
+        )
+
         if user and is_same_password:
             login_user(user)
             print(current_user.is_authenticated)
