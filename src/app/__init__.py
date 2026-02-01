@@ -143,6 +143,20 @@ def update_user(id: int):
     return jsonify({"message": f"Usuário {id} atualizado com sucesso"}), 200
 
 
+@app.delete("/user/<int:id>")
+@login_required
+def delete_user(id: int):
+    user = User.query.get(id)
+
+    if not user:
+        return jsonify({"message": "Usuário não encontrado"}), 404
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({"message": f"Usuário {id} deletado com sucesso"}), 200
+
+
 @app.get("/hello")
 def hello_world():
     return jsonify({"message": "Hello world"})
