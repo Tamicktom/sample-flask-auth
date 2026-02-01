@@ -124,16 +124,15 @@ def update_user(id: int):
     is_same_user = user.id == current_user.id
     is_admin = current_user.role == "admin"
 
-    print({
-        is_same_user,
-        is_admin
-    })
+    print({is_same_user, is_admin})
 
     # if is not the same user
     if not is_same_user:
         if not is_admin:
             return (
-                jsonify({"message": "Você não tem permissão para atualizar este usuário"}),
+                jsonify(
+                    {"message": "Você não tem permissão para atualizar este usuário"}
+                ),
                 403,
             )
 
@@ -166,7 +165,9 @@ def update_user(id: int):
 def delete_user(id: int):
     user = User.query.get(id)
 
-    if current_user.id != user.id:
+    is_admin = current_user.role == "admin"
+
+    if current_user.id != user.id or not is_admin:
         return (
             jsonify({"message": "Você não tem permissão para deletar este usuário"}),
             403,
