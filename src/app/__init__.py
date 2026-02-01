@@ -148,6 +148,12 @@ def update_user(id: int):
 def delete_user(id: int):
     user = User.query.get(id)
 
+    if current_user.id != user.id:
+        return (
+            jsonify({"message": "Você não tem permissão para deletar este usuário"}),
+            400,
+        )
+
     if not user:
         return jsonify({"message": "Usuário não encontrado"}), 404
 
